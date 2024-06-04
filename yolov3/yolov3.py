@@ -10,7 +10,7 @@
 #================================================================
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.layers import Conv2D, Input, LeakyReLU, ZeroPadding2D, BatchNormalization, MaxPool2D
+from tensorflow.keras.layers import Conv2D, Input, LeakyReLU, ZeroPadding2D, BatchNormalization, MaxPool2D, Add, Concatenate
 from tensorflow.keras.regularizers import l2
 from yolov3.utils import read_class_names
 from yolov3.configs import *
@@ -54,7 +54,7 @@ def residual_block(input_layer, input_channel, filter_num1, filter_num2):
     conv = convolutional(input_layer, filters_shape=(1, 1, input_channel, filter_num1))
     conv = convolutional(conv       , filters_shape=(3, 3, filter_num1,   filter_num2))
 
-    residual_output = short_cut + conv
+    residual_output = fAdd(short_cut, conv)
     return residual_output
 
 def upsample(input_layer):
